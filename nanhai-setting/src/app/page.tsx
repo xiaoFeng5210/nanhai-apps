@@ -1,9 +1,11 @@
-import Header from "~/components/header/header";
+"use client";
+import NavigatorComp from "~/components/navigator/navigator";
+import customTheme from "~/app/theme";
+import {ChakraProvider} from "@chakra-ui/react";
+import React from "react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <Header></Header>
-    </main>
+    <div></div>
   );
 }
