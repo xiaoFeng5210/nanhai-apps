@@ -1,0 +1,100 @@
+.image_container {
+  background-image: url("../../../public/images/food_background.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-origin: content-box;
+  background-position: center;
+  animation: zoomInOut 5s alternate-reverse infinite;
+}
+
+@keyframes zoomInOut {
+  0% {
+    background-size: 110%; /* 初始和结束状态，背景图片大小为100% */
+  }
+  100% {
+    background-size: 120%; /* 中间状态，背景图片大小放大到120% */
+  }
+}
+hr.style-eight {
+  overflow: visible; /* For IE */
+  height: 30px;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px 0 0 0;
+  border-radius: 20px;
+}
+hr.style-eight:before {
+  display: block;
+  content: "";
+  height: 30px;
+  margin-top: -31px;
+  border-style: solid;
+  border-color: black;
+  border-width: 0 0 1px 0;
+  border-radius: 20px;
+}
+
+.hr-mid-circle,
+.hr-mid-square {
+  border: 0;
+  color: #d0d0d5;
+  background: linear-gradient(currentColor, currentColor) no-repeat center;
+  background-size: 100% 10px;
+}
+.hr-mid-circle::before {
+  content: '';
+  display: block;
+  width: .75em; height: .75em;
+  border-radius: 50%;
+  background-color: currentColor;
+  margin: auto;
+}
+.hr-mid-square::before {
+  content: '';
+  display: block;
+  width: .75em; height: .75em;
+  transform: rotate(45deg);
+  background-color: currentColor;
+  margin: 3px auto;
+}
+
+.hr-mid-circle[multiple]::before {
+  box-shadow: 1.5em 0, -1.5em 0;
+}
+.hr-mid-square[multiple]::before {
+  box-shadow: 1.25em -1.25em, -1.25em 1.25em;;
+}
+
+
+
+
+
+.hr-double-arrow {
+  color: #d0d0d5;
+  border: double;
+  border-width: 3px 5px;
+  border-color: #d0d0d5 transparent;
+  height: 1px;
+  overflow: visible;
+  margin-left: 20px;
+  margin-right: 20px;
+  position: relative;
+}
+.hr-double-arrow:before,
+.hr-double-arrow:after {
+  content: '';
+  position: absolute;
+  width: 5px; height: 5px;
+  border-width: 0 3px 3px 0;
+  border-style: double;
+  top: -3px;
+  background: radial-gradient(2px at 1px 1px, currentColor 2px, transparent 0) no-repeat;
+}
+.hr-double-arrow:before {
+  transform: rotate(-45deg);
+  left: -20px;
+}
+.hr-double-arrow:after {
+  transform: rotate(135deg);
+  right: -20px;
+}
