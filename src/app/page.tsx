@@ -14,7 +14,7 @@ export default function Home() {
         {/*<hr className="hr-mid-circle"/>*/}
         {/*<hr className="hr-mid-square my-2"/>*/}
         {/*<hr className="hr-double-arrow"/>*/}
-        <hr className="style-eight"  />
+        <hr className="style-eight mb-4" />
         <Doing/>
       </div>
     </div>
