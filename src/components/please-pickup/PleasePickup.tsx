@@ -8,7 +8,7 @@ const PleasePickup = () => {
 
       <div className="flex-1 grid grid-cols-4 p-2">
         {
-          [212, 3 ,432].map(item => {
+          [212, 301 ,432, 981].map(item => {
             return (
               <div key={item} className="flex flex-col justify-center items-center w-full">
                 <div className="w-[80%] h-24 bg-[#38A16A] text-white rounded-3xl font-sans font-bold text-[3rem] inline-flex justify-center items-center">{item}</div>

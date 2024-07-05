@@ -8,7 +8,7 @@ const Doing = () => {
 
       <div className="flex-1 grid grid-cols-4 grid-rows-3">
         {
-          ['T1232', 31 ,132, 110, 278, 302, 556].map(item => {
+          [1232, 31 ,132, 110, 278, 302, 556].map(item => {
             return (
               <div key={item} className="flex flex-col justify-center items-center w-full">
                 <div className="w-[80%] h-24 rounded-3xl font-sans font-bold text-[3rem] inline-flex justify-center items-center bg-[#3183CE] text-white">{item}</div>
