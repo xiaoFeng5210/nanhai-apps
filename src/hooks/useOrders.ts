@@ -17,7 +17,7 @@ export default function useOrders() {
   useEffect(() => {
     pushBroadStack.current = pushPlay
     startBroadcast.current = play
-    getOrderList();
+    // getOrderList();
     poll()
 
     return () => {
@@ -33,26 +33,20 @@ export default function useOrders() {
   }
 
   async function getOrderList() {
-    // TODO: 暂时注释掉
-    // const res = await fetchGetOrderList(query.count).catch(err => {
-    //   throw new Error(err)
-    // })
+    const res = await fetchGetOrderList(query.count).catch(err => {
+      throw new Error(err)
+    })
 
-    const res: OrderList[] = [
-      {order_id:1002, name:"面条", status: 2, soup_name: '红汤', time_left:60, time_expected:100},
-      {order_id:1000, name:"面条", status: 1, soup_name: '红汤', time_left:60, time_expected:100},
-      {order_id:1003, name:"面条", status: 2, soup_name: '红汤', time_left:60, time_expected:100},
-      {order_id:1006, name:"面条", status: 1, soup_name: '红汤', time_left:60, time_expected:100},
-      {order_id:1004, name:"面条", status: 2, soup_name: '红汤', time_left:60, time_expected:100},
-      {order_id:1010, name:"面条", status: 3, soup_name: '红汤', time_left:60, time_expected:100},
-      {order_id:1011, name:"面条", status: 3, soup_name: '红汤', time_left:60, time_expected:100},
-      {order_id:1012, name:"面条", status: 3, soup_name: '红汤', time_left:60, time_expected:100}
-    ]
+    // const res: OrderList[] = [
+    //   {order_id:1002, name:"面条", status: 2, soup_name: '红汤', time_left:60, time_expected:100, rms_order_item_code: 0},
+    //   {order_id:1000, name:"面条", status: 1, soup_name: '红汤', time_left:60, time_expected:100, rms_order_item_code: 14},
+    //   {order_id:1003, name:"面条", status: 2, soup_name: '红汤', time_left:60, time_expected:100, rms_order_item_code: 100},
+    // ]
 
     if (Array.isArray(res) && res.length > 0) {
       for (let order of res) {
         if (order?.status === 2) {
-          pushBroadStack.current && (pushBroadStack.current as Function)(order.name)
+          pushBroadStack.current && (pushBroadStack.current as Function)(order.rms_order_item_code)
         }
       }
       setOrderList(res)

@@ -1,120 +1,106 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef, useCallback } from "react";
 
-function structAudioSrc(n: string) {
-  return `/mp3/${n}.mp3`;
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+function structAudioSrc(n: string): string {
+  const basePath = isDevelopment ? '' : '/billboard';
+  return `${basePath}/mp3/${n}.mp3`;
 }
 
-const plays: Array<number> = []
-const played: Array<number> = []
+const plays: number[] = [];
+const played: number[] = [];
 
-export function useBroadcast() {
-  const LoopBroadcast = useRef(false)
-  const audio_lack = useRef<HTMLAudioElement>(null)
-
-
+export function useBroadcast(loopBroadcast: boolean = false) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const isPlaying = useRef(false);
-  const audioEnd = "/mp3/订单完成.mp3";
-  const $myAudio = useRef<HTMLAudioElement>();
-  const $welcome = useRef<HTMLAudioElement>();
-  const audioStack = useRef<string[][]>([]); // 二维数组，第一维是播放列表，第二维是播放列表中的音频
+  const audioEndSrc = structAudioSrc("订单完成");
+  const audioStack = useRef<string[][]>([]);
   const playList = useRef<string[]>([]);
-
   const audioErrors = useRef<string>("");
+
   useEffect(() => {
-    $myAudio.current = document.getElementById("audio") as HTMLAudioElement;
-    // @ts-ignore
-    audio_lack.current = document.getElementById('audio_lack') as HTMLAudioElement;
-    // $myAudio.current = new Audio();
-    isPlaying.current = false
+    audioRef.current = document.getElementById("audio") as HTMLAudioElement;
+    if (!audioRef.current) {
+      console.error("未找到音频元素");
+    }
   }, []);
 
-  function createPlayList(strArr: string[]) {
+  const createPlayList = useCallback((strArr: string[]) => {
+    playList.current = [];
     if (strArr.length === 1) {
-      playList.current.push(structAudioSrc(strArr[0]));
-      playList.current.push(audioEnd);
-    } else if (strArr.length === 2) {
-      playList.current.push(structAudioSrc("0"));
-      playList.current.push(structAudioSrc(strArr[0]));
-      playList.current.push(structAudioSrc(strArr[1]));
-      playList.current.push(audioEnd);
-    } else if (strArr.length === 3) {
-      playList.current.push(structAudioSrc(strArr[0]));
-      playList.current.push(structAudioSrc(strArr[1]));
-      playList.current.push(structAudioSrc(strArr[2]));
-      playList.current.push(audioEnd);
-    } else if (strArr.length === 4) {
-      playList.current.push(structAudioSrc(strArr[0]));
-      playList.current.push(structAudioSrc(strArr[1]));
-      playList.current.push(structAudioSrc(strArr[2]));
-      playList.current.push(structAudioSrc(strArr[3]));
-      playList.current.push(audioEnd);
+      playList.current.push(structAudioSrc(strArr[0]), audioEndSrc);
+    } else if (strArr.length >= 2 && strArr.length <= 4) {
+      if (strArr.length === 2) playList.current.push(structAudioSrc("0"));
+      strArr.forEach(num => playList.current.push(structAudioSrc(num)));
+      playList.current.push(audioEndSrc);
+    } else {
+      console.error("输入数组长度无效");
     }
-  }
-  function playEndedHandler() {
+  }, []);
+
+  const playEndedHandler = useCallback(() => {
     playList.current.shift();
     if (playList.current.length > 0) {
-      $myAudio.current!.src = playList.current[0];
-      $myAudio.current!.play().catch(err => {
-      });
-    }
-
-    if (playList.current.length === 0) {
-      audioStack.current.shift();
-
-      const id = plays.shift()
-      if (typeof id !== undefined) {
-        played.push(id as number);
+      if (audioRef.current) {
+        audioRef.current.src = playList.current[0];
+        audioRef.current.play().catch(err => {
+          console.error("播放音频时出错，此时音频路径是:", playList.current[0], err);
+          audioErrors.current = err.message;
+        });
       }
-
-      isPlaying.current = false
-      $myAudio.current?.removeEventListener("ended", playEndedHandler, false);
+    } else {
+      audioStack.current.shift();
+      const id = plays.shift();
+      if (id !== undefined) {
+        played.push(id);
+      }
+      isPlaying.current = false;
+      audioRef.current?.removeEventListener("ended", playEndedHandler);
     }
-  }
-  function playAudio() {
-    if (plays.length === 0) return;
+  }, []);
+
+  const playAudio = useCallback(() => {
+    if (plays.length === 0 || !audioRef.current) return;
 
     isPlaying.current = true;
-    playList.current = [];
-
-    const id = plays[0]
-    const strId = id.toString();
-    const strArr = strId.split("");
-    console.log(strArr)
+    const id = plays[0];
+    const strArr = id.toString().split("");
     createPlayList(strArr);
+
     if (playList.current.length > 0) {
       audioStack.current.push(playList.current);
-      $myAudio.current!.src = playList.current[0];
-      $myAudio.current!.addEventListener("ended", playEndedHandler, false);
-      $myAudio.current?.play().catch(err => {
-        // audioErrors.current = err;
+      audioRef.current.src = playList.current[0];
+      audioRef.current.addEventListener("ended", playEndedHandler);
+      audioRef.current.play().catch(err => {
+        console.error("播放音频时出错, 此时音频路径是:", playList.current[0], err);
+        audioErrors.current = err.message;
       });
     }
-  }
-  function pushPlay(id: number) {
-    // FIXME 配置
-    if (LoopBroadcast.current) {
-      if (plays.includes(id)) return;
-      plays.push(id);
+  }, [createPlayList, playEndedHandler]);
+
+  const pushPlay = useCallback((id: number) => {
+    if (loopBroadcast) {
+      if (!plays.includes(id)) plays.push(id);
+    } else {
+      if (!plays.includes(id) && !played.includes(id)) plays.push(id);
     }
-    else {
-      if (plays.includes(id) || played.includes(id)) return;
-      plays.push(id);
+  }, [loopBroadcast]);
+
+  const prePlay = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.src = structAudioSrc("开启语音");
+      audioRef.current.play().catch(err => {
+        console.error("预播放音频时出错:", err);
+      });
     }
-  }
+  }, []);
 
-  function prePlay() {
-    $myAudio.current!.src = "/mp3/开启语音.mp3";
-    $myAudio.current?.play().then(() => {});
-  }
-
-  function play() {
-    if (!$myAudio.current) return;
-    if (isPlaying.current) return;
-
+  const play = useCallback(() => {
+    if (!audioRef.current || isPlaying.current) return;
     if (plays.length > 0) {
       playAudio();
     }
-  }
+  }, [playAudio]);
 
   return { play, audioStack, pushPlay, prePlay, audioErrors };
 }

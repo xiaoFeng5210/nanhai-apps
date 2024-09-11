@@ -12,8 +12,8 @@ const Doing: FC<{list: OrderList[]}> = ({list}) => {
         {
           list.map(item => {
             return (
-              <div key={item.order_id} className="flex flex-col justify-center items-center w-full">
-                <div className="w-[80%] h-24 rounded-3xl font-sans font-bold text-[3rem] inline-flex justify-center items-center bg-[#3183CE] text-white">{item?.order_id}</div>
+              <div key={item.rms_order_item_code} className="flex flex-col justify-center items-center w-full">
+                <div className="w-[80%] h-24 rounded-3xl font-sans font-bold text-[3rem] inline-flex justify-center items-center bg-[#3183CE] text-white">{item?.rms_order_item_code}</div>
               </div>
             )
           })

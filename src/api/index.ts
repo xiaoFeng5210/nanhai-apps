@@ -13,6 +13,7 @@ export interface OrderList {
   time_left: number
   time_expected: number
   soup_name: string
+  rms_order_item_code: number
 }
 /**
  * 列表请求

@@ -34,6 +34,7 @@ export default function Home() {
         <hr className="style-eight mb-4" />
         <Doing list={preparingList}/>
       </div>
+      <audio id="audio" />
     </div>
   );
 }
