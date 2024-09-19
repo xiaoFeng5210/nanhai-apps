@@ -24,14 +24,15 @@ export default function Home() {
     })
   }, [orderList])
   return (
-    <div className="w-screen h-screen flex">
-      <ImageContainer/>
-      <div className="flex-[2] p-4 flex flex-col w-full">
+    <div className="w-screen h-screen flex p-5 bg-[#1f2022]">
+      {/*<ImageContainer/>*/}
+      <div className="flex-1 p-4 flex w-full">
         <PleasePickup list={completeList} />
         {/*<hr className="hr-mid-circle"/>*/}
         {/*<hr className="hr-mid-square my-2"/>*/}
         {/*<hr className="hr-double-arrow"/>*/}
-        <hr className="style-eight mb-4" />
+        {/*<hr className="style-eight mb-4" />*/}
+        <div className="w-[2px] bg-white h-full"></div>
         <Doing list={preparingList}/>
       </div>
       <audio id="audio" />
