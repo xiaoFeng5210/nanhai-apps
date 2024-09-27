@@ -21,16 +21,18 @@ const Doing: FC<{list: OrderList[]}> = ({list}) => {
                 <div key={item.rms_order_item_code} className="flex flex-col justify-center items-center w-full">
                   <div
                     className=" w-[100%] h-24 rounded-3xl font-sans font-bold text-[3rem] inline-flex justify-evenly items-center text-white">
-                    <span>{item?.rms_order_item_code}号</span>
+                    {/*<span>{item?.rms_order_item_code}号</span>*/}
+                    <span>{item?.renderCode}号</span>
+
                     <div className="text-[3rem] inline-flex items-center">
-                      <img src="/images/wait_eat2.svg" className="h-[3rem]" alt=""/>
+                      {/*<img src="/images/wait_eat2.svg" className="h-[3rem]" alt=""/>*/}
                       <span>{item.time_left}s</span>
                     </div>
                   </div>
                 </div>
               )
-            })
-          }
+          })
+        }
         </div>
       </div>
       );

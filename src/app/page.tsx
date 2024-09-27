@@ -11,15 +11,18 @@ export default function Home() {
   const completeList = useMemo(() => {
     return orderList.filter(item =>  {
       if (item.status === 2) {
-        return item
+        return {
+          ...item,
+        }
       }
     })
   }, [orderList])
-
   const preparingList = useMemo(() => {
     return orderList.filter(item => {
       if (item.status !== 2) {
-        return item
+        return {
+          ...item,
+        }
       }
     })
   }, [orderList])

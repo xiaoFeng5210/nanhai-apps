@@ -14,6 +14,9 @@ export interface OrderList {
   time_expected: number
   soup_name: string
   rms_order_item_code: number
+  sideboard?: number
+  timeout?: boolean
+  renderCode?: string
 }
 /**
  * 列表请求

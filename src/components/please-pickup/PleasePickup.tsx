@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {OrderList} from "~/api";
 
 const PleasePickup: FC<{list: OrderList[]}> = ({list}) => {
@@ -12,6 +12,9 @@ const PleasePickup: FC<{list: OrderList[]}> = ({list}) => {
     console.log('list:', list)
   }, [list])
 
+  // const renderCode = useMemo(() => {
+  // })
+
   return (
     <div className="flex-[1] flex flex-col font-serif">
       <div className="flex justify-center w-full">
@@ -23,7 +26,11 @@ const PleasePickup: FC<{list: OrderList[]}> = ({list}) => {
           list?.map(item => {
             return (
               <div key={item.rms_order_item_code} className="flex flex-col justify-center items-center w-full">
-                <div className="w-[80%] h-auto text-white rounded-3xl font-sans font-bold text-[5rem] inline-flex justify-center items-center">{item?.rms_order_item_code}号</div>
+                <div
+                  className="w-[80%] h-auto text-white rounded-2xl font-sans font-bold text-[5rem] inline-flex justify-between items-center">
+                  <span style={{color: item.timeout ? 'red' : 'green' }}>{item?.renderCode}号</span>
+                  <span className="">出餐口：{item?.sideboard ?? '暂无数据'}</span>
+                </div>
               </div>
             )
           })

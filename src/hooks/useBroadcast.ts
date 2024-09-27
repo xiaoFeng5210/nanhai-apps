@@ -24,10 +24,11 @@ export function useBroadcast(loopBroadcast: boolean = false) {
       console.error("未找到音频元素");
     }
   }, []);
-
   const createPlayList = useCallback((strArr: string[]) => {
     playList.current = [];
     if (strArr.length === 1) {
+      playList.current.push(structAudioSrc("0"));
+      playList.current.push(structAudioSrc("0"));
       playList.current.push(structAudioSrc(strArr[0]), audioEndSrc);
     } else if (strArr.length >= 2 && strArr.length <= 4) {
       if (strArr.length === 2) playList.current.push(structAudioSrc("0"));
